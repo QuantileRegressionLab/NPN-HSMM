@@ -9,6 +9,11 @@ The `R` scripts in this repository are designed to evaluate the performance of t
 -   [R](https://cran.r-project.org/) version 4.5.1 or higher
 -   [RStudio](https://rstudio.com/) version 2024.12.1+563 or higher
 
+Some portions of the code have been parallelized using the following packages:
+-   `foreach`
+-   `parallel`
+-   `doParallel`
+
 ### R Packages used (version in parentheses)
 
 - MASS (7.3.65)
@@ -35,7 +40,7 @@ This code contains the functions to run the `R` scripts in this repository. The 
 ### Simulations
 The following scripts allows to reproduce the results of our simulation study:
 -    `run_simulazioni` and `run_simulazioni_3K` contain the code to run all the considered scenarios in our simulation study with 2 and 3 hidden states.
--    `run_simulazioni_glasso` and `run_simulazioni_glasso_3K` contain the code to fit the hidden Markov Normal graphical model of Städler and Mukherjee (2013). for all the considered scenarios in our simulation study with 2 and 3 hidden states.
+-    `run_simulazioni_glasso` and `run_simulazioni_glasso_3K` contain the code to fit the hidden Markov Normal graphical model of Städler and Mukherjee (2013) for all the considered scenarios in our simulation study with 2 and 3 hidden states.
 
 ### Empirical application
 -    `analisi_empirica_2023_LM` allows to implement the procedure for selecting simultaneously the number of latent states and the optimal value of the Lasso regularization parameter using the ICL. This script yields the final model with 3 states, and can be used to reproduce Figure 1 in the manuscript.

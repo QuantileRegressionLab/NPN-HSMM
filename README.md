@@ -23,6 +23,7 @@ Some portions of the code have been parallelized using the following packages:
 - doParallel (1.0.17)
 - mclust (6.1.1)
 - cluster (2.1.8)
+- PearsonDS (1.3.2)
 - markovchain (0.10.0)
 - mhsmm (0.4.21)
 - glasso (1.11)

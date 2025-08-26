@@ -19,8 +19,8 @@ Some portions of the code have been parallelized using the following packages:
 - MASS (7.3.65)
 - mvtnorm (1.3.3)
 - foreach (1.5.2)
-- doParallel (1.0.17)
 - parallel (4.5.1)
+- doParallel (1.0.17)
 - mclust (6.1.1)
 - cluster (2.1.8)
 - markovchain (0.10.0)
@@ -39,10 +39,10 @@ This code contains the functions to run the `R` scripts in this repository. The 
 
 ### Simulations
 The following scripts allows to reproduce the results of our simulation study:
--    `run_simulazioni` and `run_simulazioni_3K` contain the code to run all the considered scenarios in our simulation study with 2 and 3 hidden states.
--    `run_simulazioni_glasso` and `run_simulazioni_glasso_3K` contain the code to fit the hidden Markov Normal graphical model of Städler and Mukherjee (2013) for all the considered scenarios in our simulation study with 2 and 3 hidden states.
+-    `run_sim` and `run_sim_3K` contain the code to run all the considered scenarios in our simulation study with 2 and 3 hidden states.
+-    `run_sim_glasso` and `run_sim_glasso_3K` contain the code to fit the hidden Markov Normal graphical model of Städler and Mukherjee (2013) for all the considered scenarios in our simulation study with 2 and 3 hidden states.
 
 ### Empirical application
--    `analisi_empirica_2023_LM` allows to implement the procedure for selecting simultaneously the number of latent states and the optimal value of the Lasso regularization parameter using the ICL. This script yields the final model with 3 states, and can be used to reproduce Figure 1 in the manuscript.
--    `analisi_empirica_2023_boot_LM` implements the parametric bootstrap approach described in the Supplementary Materials of the work. This script requires the output provided by `analisi_empirica_2023_LM.R` and yields the estimated standard deviation of each parameter estimates.
--    Once we obtained the estimates and standard errors, the script `fig&tab_emp.R` allows to reproduce Figures 3 (sojourn distributions) and 4(state-specific graphs) in the manuscript.
+-    `emp_analysis_2023` allows to implement the procedure for selecting simultaneously the number of latent states and the optimal value of the Lasso regularization parameter using the ICL. This script yields the final model with 3 states, and can be used to reproduce Figure 1 in the manuscript.
+-    `emp_analysis_2023_boot` implements the parametric bootstrap approach described in the Supplementary Materials of the work. This script requires the output provided by `emp_analysis_2023.R` and yields the estimated standard deviation of each parameter estimates.
+-    Once we obtained the estimates and standard errors, the script `fig&tab_emp.R` allows to reproduce Figures 3 (sojourn distributions) and 4 (state-specific graphs) in the manuscript.

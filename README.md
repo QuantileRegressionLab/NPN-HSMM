@@ -1,6 +1,6 @@
 # README file
 
-The `R` scripts in this repository are designed to evaluate the performance of the research detailed in *Nonparanormal hidden semi-Markov graphical models for analyzing financial markets interconnectivity* by Emilio Ferrante, Foroni, Merlo, and Petrella (2025). 
+The `R` scripts in this repository are designed to evaluate the performance of the research detailed in *Nonparanormal hidden semi-Markov graphical models for analyzing financial markets interconnectivity* by E. Ferrante, B. Foroni, L. Merlo, and L. Petrella (2025). 
 
 
 ## Prerequisites
@@ -27,8 +27,18 @@ Some portions of the code have been parallelized using the following packages:
 - mhsmm (0.4.21)
 - glasso (1.11)
 - car (3.1.3)
-- Matrix (1.7.3) 
+- Matrix (1.7.3)
+- dplyr (1.1.4)
+- stringr (1.5.1)
+- doBy (4.6.26)
+- qgraph (1.9.8)
+- igraph (2.1.4)
+- viridis (0.6.5)
 - ggplot2 (3.5.2)
+- xts (0.14.1)
+- reshape2 (1.4.4)
+- gridExtra (2.3)
+- ggpubr (0.6.0)
 
 ## Script description
 ### MainFunctions.R
@@ -42,6 +52,7 @@ The following scripts allows to reproduce the results of our simulation study:
 -    `run_sim` and `run_sim_3K` contain the code to run all the considered scenarios in our simulation study with 2 and 3 hidden states.
 -    `run_sim_glasso` and `run_sim_glasso_3K` contain the code to fit the hidden Markov Normal graphical model of Städler and Mukherjee (2013) for all the considered scenarios in our simulation study with 2 and 3 hidden states. The EM algorithm to implement this model can be found in the script `em_glasso`.
 -    `run_sim_bootstrap` and `run_sim_bootstrap_3K` contain the code to obtain the confidence interval coverage based on parametric bootstrap, with 2 and 3 hidden states.
+-    `tab_sim` reproduces the tables in the Supplementary Materials summarizing the results.
 
 ### Empirical application
 -    `emp_analysis_2023` allows to implement the procedure for selecting simultaneously the number of latent states and the optimal value of the Lasso regularization parameter using the ICL. This script yields the final model with 3 states, and can be used to reproduce Figure 1 in the manuscript.

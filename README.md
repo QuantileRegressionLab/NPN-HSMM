@@ -25,3 +25,10 @@ The R scripts in this repository are designed to evaluate the performance of the
 - car (3.1.3)
 - Matrix (1.7.3) 
 - ggplot2 (3.5.2)
+
+## Script description
+### WorkHorse.R
+This script contains the functions to run the `R` scripts in this repository. The main functions are: 
+-    `QMGM` allows to fit the proposed mid-quantile mixed graphical model (QMGM).
+-    `fit.cat` allows to estimate the regression parameters of a LASSO-penalized mid-quantile regression.
+-    `midCDF_est` allows to estimate the conditional mid-CDF.

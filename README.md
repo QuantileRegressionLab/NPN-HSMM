@@ -40,7 +40,8 @@ This code contains the functions to run the `R` scripts in this repository. The 
 ### Simulations
 The following scripts allows to reproduce the results of our simulation study:
 -    `run_sim` and `run_sim_3K` contain the code to run all the considered scenarios in our simulation study with 2 and 3 hidden states.
--    `run_sim_glasso` and `run_sim_glasso_3K` contain the code to fit the hidden Markov Normal graphical model of Städler and Mukherjee (2013) for all the considered scenarios in our simulation study with 2 and 3 hidden states.
+-    `run_sim_glasso` and `run_sim_glasso_3K` contain the code to fit the hidden Markov Normal graphical model of Städler and Mukherjee (2013) for all the considered scenarios in our simulation study with 2 and 3 hidden states. The EM algorithm to implement this model can be found in the script `em_glasso`.
+-    `run_sim_bootstrap` and `run_sim_bootstrap_3K` contain the code to obtain the confidence interval coverage based on parametric bootstrap, with 2 and 3 hidden states.
 
 ### Empirical application
 -    `emp_analysis_2023` allows to implement the procedure for selecting simultaneously the number of latent states and the optimal value of the Lasso regularization parameter using the ICL. This script yields the final model with 3 states, and can be used to reproduce Figure 1 in the manuscript.

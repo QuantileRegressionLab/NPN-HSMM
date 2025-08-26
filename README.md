@@ -36,3 +36,7 @@ This code contains the functions to run the `R` scripts in this repository. The 
 The following scripts allows to reproduce the results of our simulation study:
 -    `run_simulazioni` and `run_simulazioni_3K` contain the code to run all the considered scenarios in our simulation study with 2 and 3 hidden states.
 -    `run_simulazioni_glasso` and `run_simulazioni_glasso_3K` contain the code to fit the hidden Markov Normal graphical model of Städler and Mukherjee (2013). for all the considered scenarios in our simulation study with 2 and 3 hidden states.
+
+### Empirical applications
+-    `analisi_empirica_2023_LM` allows to implement the procedure for selecting simultaneously the number of latent states and the optimal value of the Lasso regularization parameter using the ICL. This script yields the final model with 3 states.
+-    `analisi_empirica_2023_boot_LM` implements the parametric bootstrap approach described in the Supplementary Materials of the work. This script requires the output provided by `analisi_empirica_2023_LM.R` and yields the estimated standard deviation of each parameter estimates.

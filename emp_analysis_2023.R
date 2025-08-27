@@ -1,3 +1,58 @@
+rm(list = ls())
+graphics.off()
+gc()
+library(cluster)
+library(readr)
+library(readxl)
+library(MASS)
+library(car)
+library(glasso)
+library(mhsmm)
+library(markovchain)
+library(mclust)
+library(doBy)
+library(qgraph)
+library(viridis)
+library(moments)
+library(igraph)
+library(xts)
+library(PearsonDS)
+source("MainFunctions.R")
+
+#####################################################################
+# Load the data here
+
+
+#####################################################################
+# Summary statistics
+means = rep(0,ncol(Y))
+std.dev = rep(0,ncol(Y))
+skews = rep(0,ncol(Y))
+kurts = rep(0,ncol(Y))
+mins = rep(0,ncol(Y))
+medians = rep(0,ncol(Y))
+maxs = rep(0,ncol(Y))
+
+for(i in 1:ncol(Y)){
+  means[i] = mean(Y[,i])
+  std.dev[i] = sd(Y[,i])
+  skews[i] = skewness(Y[,i])
+  kurts[i] = kurtosis(Y[,i])
+  mins[i] = min(Y[,i])
+  medians[i] = median(Y[,i])
+  maxs[i] = max(Y[,i])
+}
+
+summary(means)
+summary(std.dev)
+summary(skews)
+summary(kurts)
+summary(mins)
+summary(medians)
+summary(maxs)
+
+###########################################################################################
+# Fit the model
 S_grid = c(2,3,4,5,6)
 N = nrow(Y)
 P = ncol(Y)

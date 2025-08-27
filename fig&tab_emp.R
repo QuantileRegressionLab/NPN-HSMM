@@ -5,6 +5,7 @@ library(cluster)
 library(readr)
 library(readxl)
 library(MASS)
+library(dplyr)
 library(ggplot2)
 library(car)
 library(glasso)
@@ -232,7 +233,7 @@ p
 ####### Predicted sequence of hidden states over time #####
 d_list <- list(aaa$d[,1], aaa$d[,2], aaa$d[,3])
 Gamma_star <- hsmm2hmm(aaa$gamma, d_list)
-emissions_star <- do.call(cbind, lapply(1:ncol(aaa$u), function(i) matrix(rep(aaa$u[, i], M), nrow = nrow(aaa$u), ncol = M)))
+emissions_star <- do.call(cbind, lapply(1:ncol(aaa$fden), function(i) matrix(rep(aaa$fden[, i], M), nrow = nrow(aaa$fden), ncol = M)))
 initials_star <- c(aaa$init[1], rep(0, M-1), rep(aaa$init[2], M), rep(aaa$init[3], M))
 
 
@@ -241,21 +242,21 @@ max_post <- apply(aaa$u, 1, which.max)
 ## with Viterbi algorithm
 seq_Viterbi <- Viterbi(Y[,1], transProbs = Gamma_star, emissionProbs = emissions_star,
                        initial_distribution = initials_star)
-Viterbi_transformed <- findInterval(seq_Viterbi, c(M+1, 2*M+1)) + 1
+Viterbi_transformed <- findInterval(seq_Viterbi, c(M+1, 2*M +1)) + 1
+
 
 sum(max_post != Viterbi_transformed)
+
 
 pred.post_df <- data.frame(
   day = as.Date(rownames(Y)),
   value = c(max_post, Viterbi_transformed),
   Algorithm = rep(c("Max a Posteriori", "Viterbi"), each = N)
-  # value = c(max_post),
-  # Algorithm = rep(c("Max a Posteriori"), each = N)
 )
+
 
 p1 <- ggplot(pred.post_df, aes(x=day, y=value)) +
   geom_line() + facet_wrap(~factor(Algorithm, levels = c("Max a Posteriori", "Viterbi")), nrow = 2) +
-  # geom_line() + facet_wrap(~factor(Algorithm, levels = c("Max a Posteriori")), nrow = 1) +
   scale_x_date(date_labels = c("%Y"), breaks = "1 year") + 
   scale_y_continuous(breaks = 1:3) +
   aes(colour = Algorithm)  +
@@ -263,7 +264,6 @@ p1 <- ggplot(pred.post_df, aes(x=day, y=value)) +
   ylab("States") +
   theme(legend.position = "none",
         axis.text.x  = element_text(size = 16),
-        # plot.margin = margin(, .3, , .2, "cm"),
         axis.title.x = element_text(size=21),
         axis.title.y = element_text(size=21),
         axis.text.y = element_text(size=12),
@@ -273,63 +273,52 @@ p1 <- ggplot(pred.post_df, aes(x=day, y=value)) +
                            "inches")) 
 p1
 
-
+library(gridExtra)
 grid.arrange(p,p1, nrow = 2)
-
 #1121*610
-
 
 table(Viterbi_transformed)/N
 table(max_post)/N
 
-###### Alltogheter returns plot #######
 
-# normalTS <- function(x) (x - min(x))/(max(x) - min(x))
+###### All together returns plot #######
 date = as.Date(rownames(Y))
-# date = c[2:length(c)]
-
 ret <- Y
-# prices_norm <- apply(prices, 2, normalTS)
 
-# ret_crypto_df <- data.frame(date, 
-#                                ret[,1], ret[,2], ret[,3], ret[,4], ret[,5], State = factor(max_post))
-ret_crypto_df <- data.frame(date, 
+ret_crypto_df <- data.frame(date,
                             ret[,1], ret[,2], ret[,3], ret[,4], ret[,5], State = factor(Viterbi_transformed))
 
-# ret_stock_df <- data.frame(date,
-#                            ret[,6], ret[,7], State = factor(max_post))
 ret_stock_df <- data.frame(date,
                            ret[,6], ret[,7], State = factor(Viterbi_transformed))
 
-# ret_currency_df <- data.frame(date,
-#                               ret[,8], ret[,9], ret[,10], ret[,11], ret[,12], State = factor(max_post))
 ret_currency_df <- data.frame(date,
                               ret[,8], ret[,9], ret[,10], ret[,11], ret[,12], State = factor(Viterbi_transformed))
 
-# ret_energy_df <- data.frame(date,
-#                             ret[,13], ret[,14], ret[,15], ret[,16], ret[,17], State = factor(max_post))
 ret_energy_df <- data.frame(date,
                             ret[,13], ret[,14], ret[,15], ret[,16], ret[,17], State = factor(Viterbi_transformed))
 
-# ret_macroeconomy_df <- data.frame(date,
-#                                   ret[,18], ret[,19], ret[,20], ret[,21], State = factor(max_post))
 ret_macroeconomy_df <- data.frame(date,
                                   ret[,18], ret[,19], ret[,20], ret[,21], State = factor(Viterbi_transformed))
 
+
 labels = c("BNB", "BTC", "DOGE", "ETH", "XRP", "SP", "STOXX", "JPY", "GBP", "EUR", "CNY", "CHF", "CL", "HO", "NG", "RB", "BZ", "MAT", "REIT", "IND", "IT")
+
 
 colnames(ret_crypto_df) <- c("Date", c("BNB", "BTC", "DOGE", "ETH", "XRP"), "State")
 
+
 colnames(ret_stock_df) <- c("Date", c("SP", "STOXX"), "State")
+
 
 colnames(ret_currency_df) <- c("Date", c("JPY","GBP","EUR","CNY", "CHF"), "State")
 
+
 colnames(ret_energy_df) <- c("Date", c("CL", "HO", "NG", "RB", "BZ"), "State")
+
 
 colnames(ret_macroeconomy_df) <- c("Date", c("MAT", "REIT", "IND", "IT"), "State")
 
-
-############ Creazione degli intervalli di tempo per le barre orizzontali ############
+############ Creation of time intervals for the horizontal bars ############
 state_int <- ret_crypto_df %>%
   group_by(State) %>%
   mutate(start_date = Date, end_date = lead(Date, default = last(Date))) %>%
@@ -342,11 +331,6 @@ gg3 <- melt(ret_currency_df, id.vars = c("Date", "State"), variable.name="Curren
 gg4 <- melt(ret_energy_df, id.vars = c("Date", "State"), variable.name = "Energy", value.name = "Returns")
 gg5 <- melt(ret_macroeconomy_df, id.vars = c("Date", "State"), variable.name="Macroeconomy", value.name="Returns")
 
-# Definisci una palette di colori personalizzati
-# personal_colors<- c("1" = "#E41A1C",  # Rosso
-#                 "2" = "#4DAF4A",# Verde
-#                 "3" = "#4876FF") # Blu  
-
 personal_colors<- c("1" = "#F08080",  # Rosso
                     "2" = "#66CDAA",# Verde
                     "3" = "#1874CD") # Blu  
@@ -356,7 +340,6 @@ p1 <- ggplot(gg1, aes(x = Date, y = Returns, color = Cryptocurrency)) +
     aes(xmin = start_date, xmax = end_date,
         ymin = min(gg1$Returns) - 0.2 * (max(gg1$Returns) - min(gg1$Returns)),
         ymax = min(gg1$Returns) - 0.05 * (max(gg1$Returns) - min(gg1$Returns)),
-      # ymin = min(gg1$Returns) - 20, ymax = min(gg1$Returns) - 1,
       fill = State), inherit.aes = F) + 
   theme(
     legend.text = element_text(size = 18), 
@@ -382,7 +365,6 @@ p2 <- ggplot(gg2, aes(x=Date, y=Returns, color=Stock))+
     aes(xmin = start_date, xmax = end_date,
         ymin = min(gg2$Returns) - 0.2 * (max(gg2$Returns) - min(gg2$Returns)),
         ymax = min(gg2$Returns) - 0.05 * (max(gg2$Returns) - min(gg2$Returns)),
-        # ymin = min(gg2$Returns) - 5, ymax = min(gg2$Returns) - 1,
         fill = State), inherit.aes = F) + 
   theme(legend.text = element_text(size=18), legend.title = element_text(size=22),
         axis.title.x = element_text(size=28),
@@ -403,7 +385,6 @@ p3 <- ggplot(gg3, aes(x=Date, y=Returns, color=Currency))+
             aes(xmin = start_date, xmax = end_date,
                 ymin = min(gg3$Returns) - 0.2 * (max(gg3$Returns) - min(gg3$Returns)),
                 ymax = min(gg3$Returns) - 0.05 * (max(gg3$Returns) - min(gg3$Returns)),
-                # ymin = min(gg3$Returns) - 2.5, ymax = min(gg3$Returns) - 1,
                 fill = State), inherit.aes = F) + 
   theme(legend.text = element_text(size=18), legend.title = element_text(size=22),
         axis.title.x = element_text(size=28),
@@ -424,7 +405,6 @@ p4 <- ggplot(gg4, aes(x=Date, y=Returns, color=Energy))+
             aes(xmin = start_date, xmax = end_date,
                 ymin = min(gg4$Returns) - 0.2 * (max(gg4$Returns) - min(gg4$Returns)),
                 ymax = min(gg4$Returns) - 0.05 * (max(gg4$Returns) - min(gg4$Returns)),
-                # ymin = min(gg4$Returns) - 10, ymax = min(gg4$Returns) - 1,
                 fill = State), inherit.aes = F) + 
   theme(legend.text = element_text(size=18), legend.title = element_text(size=22),
         axis.title.x = element_text(size=28),
@@ -441,11 +421,10 @@ p4 <- ggplot(gg4, aes(x=Date, y=Returns, color=Energy))+
 p4
 
 p5 <- ggplot(gg5, aes(x=Date, y=Returns, color=Macroeconomy))+
-  geom_rect(data = state_int, #barra degli stati
+  geom_rect(data = state_int,
             aes(xmin = start_date, xmax = end_date,
                 ymin = min(gg5$Returns) - 0.2 * (max(gg5$Returns) - min(gg5$Returns)),
                 ymax = min(gg5$Returns) - 0.05 * (max(gg5$Returns) - min(gg5$Returns)),
-                # ymin = min(gg5$Returns) - 5, ymax = min(gg5$Returns) - 1,
                 fill = State), inherit.aes = F) + 
   theme(legend.text = element_text(size=18), legend.title = element_text(size=22),
         axis.title.x = element_text(size=28),

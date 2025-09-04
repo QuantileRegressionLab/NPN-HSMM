@@ -36,7 +36,7 @@ Theta_mmdl <- list()
 Sigma_mmdl <- list()
 
 for (j in 1:S) {
-  Theta_mmdl[[j]] <- aaa$omega[,,j]
+  Theta_mmdl[[j]] <- aaa$omega.sig[,,j]
 }
 
 d = P
@@ -46,9 +46,9 @@ for (j in 1:S) {
 }
 
 for (j in 1:S) {
-  M.parcorr[[j]] <- wi2net(round(Theta_mmdl[[j]],2))
+  M.parcorr[[j]] <- -wi2net(round(Theta_mmdl[[j]],22))
   # g[[j]] <- graph.adjacency(as.matrix(M.parcorr[[j]]), mode="upper", weighted=TRUE, diag=FALSE)
-  g[[j]] <- graph_from_adjacency_matrix(as.matrix(M.parcorr[[j]]), mode="upper", weighted=TRUE, diag=FALSE)
+  g[[j]] <- graph_from_adjacency_matrix(as.matrix(M.parcorr[[j]]), mode="undirected", weighted=TRUE, diag=FALSE)
   e[[j]] <- get.edgelist(g[[j]])
   df.e[[j]] <- as.data.frame(cbind(e[[j]],E(g[[j]])$weight))
   # Count the number of degree for each node:

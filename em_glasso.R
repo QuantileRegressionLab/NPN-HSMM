@@ -141,12 +141,11 @@ if(traceEM){
   #info.criteria
   pi_k <- rowSums(post.hmm)/N
   E = (sum(unlist(Theta) != 0) - P * K) / 2
-  Df = E + P*K + K*(K-1)
-  Df <- as.vector(Df)
-  BIC = -2*llk + log(N)*K*(K-1) + log(N)*sum(Df)
-  MMDL = -2*llk + log(N)*K*(K-1) + sum(log(N*pi_k)*Df)
+  n_parameters = E + P*K + K*(K-1)
+  AIC = -2*llk + 2*n_parameters
+  BIC = -2*llk + log(N)*n_parameters
   ICL = BIC - 2 * sum(post.hmm * ifelse(post.hmm > 0, log(post.hmm), 0))
-  pen.criteria <- list(BIC = BIC, MMDL = MMDL, ICL = ICL)
+  pen.criteria <- list(AIC = AIC, BIC = BIC, ICL = ICL)
   
   if(t.iter == iterMax){
     cat(paste("\nNo convergence after",iterMax,"iterations\n\n"))  

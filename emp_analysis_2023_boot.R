@@ -78,17 +78,44 @@ save.image("analisi_empirica_2023_M30_R20_boot_rev.RData")
 # estimate the standard errors based on the bootstrap resamples
 gamma.array = array(NA, c(S, S, R))
 d.array = array(NA, c(M, S, R))
+omega.array = array(NA, c(P, P, S, R))
 for(r in 1:R) {
   if(!is.null(results_list.boot[[r]])) {
-    state.order = order(table(results_list.boot[[r]]$predicted_state), decreasing = T)
-    gamma.array[,,r] = results_list.boot[[r]]$gamma[state.order,state.order]
-    if(!any(results_list.boot[[r]]$d == 1)) {
+    if(!any(results_list.boot[[r]]$d == 1)) { # non convergence
+      state.order = order(table(results_list.boot[[r]]$predicted_state), decreasing = T)
+      gamma.array[,,r] = results_list.boot[[r]]$gamma[state.order,state.order]
+      omega.array[,,,r] = sapply(1:S, function(s) cov2cor(results_list.boot[[r]]$omegaT[,,state.order[s]]), simplify = "array")
       d.array[,,r] = (results_list.boot[[r]]$d[,state.order])
       d.array[,,r] = dksmoothed(results_list.boot[[r]]$d[,state.order])
-     }
+    }
   }
 }
-gamma.sd = apply(gamma.array, 1:2, sd, na.rm = T)
+
+gamma.sd = apply(gamma.array, 1:2, sd.trim, trim = 0.05, na.rm = T)
 gamma.sd
 
 d.sd = apply(d.array, 1:2, sd.trim, trim = 0.05, na.rm = T)
+
+omega.sd = apply(omega.array, 1:3, sd.trim, trim = 0.1, na.rm = T)
+
+
+(sum(aaa$omega[,,1] != 0) - P)/2
+(sum(aaa$omega[,,2] != 0) - P)/2
+(sum(aaa$omega[,,3] != 0) - P)/2
+
+alpha = 0.05
+qqnorm = qnorm(1-alpha/2)
+aaa$omega.sig = array(NA, c(P, P, S))
+for (s in 1:S) {
+  
+  est = cov2cor(aaa$omegaT[,,s])
+
+  # Confidence interval bounds
+  lower = est - qqnorm * omega.sd[,,s]
+  upper = est + qqnorm * omega.sd[,,s]
+  
+  # Indicator if 0 is inside the interval
+  contains_zero = (lower <= 0 & upper >= 0)
+  
+  aaa$omega.sig[,,s] = (contains_zero == F) * cov2cor(aaa$omegaT[,,s]) # est
+}

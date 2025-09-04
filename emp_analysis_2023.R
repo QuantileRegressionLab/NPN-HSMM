@@ -21,7 +21,7 @@ source("MainFunctions.R")
 
 #####################################################################
 # Load the data here
-
+load("Y_all.RData")
 
 #####################################################################
 # Summary statistics
@@ -65,8 +65,10 @@ tmp.llk = matrix(NA, R, 1)
 output.HSMM = lapply(1:length(S_grid), function(x) {lapply(1:length(grid), function(x) {list()})})
 
 for (s in 1:length(S_grid)) {
+  print(s)
   S = S_grid[s]
   for (i in 1:length(grid)) {
+    print(i)
     lambda = grid[i]
     for (r in 1:R) {
       set.seed(r)

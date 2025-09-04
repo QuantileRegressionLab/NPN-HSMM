@@ -516,6 +516,7 @@ EM_HSMM = function(Y, S, Par = NULL, M, sojourn.distribution, lambda, pen_EBIC, 
   
   shiftthresh = 1e-20
   sojourn = list()
+  d = as.matrix(d)
   if(sojourn.distribution=="poisson") {
     sojourn$lambda_poi = S
     sojourn$shift = S

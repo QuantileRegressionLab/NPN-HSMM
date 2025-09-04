@@ -46,7 +46,7 @@ for (j in 1:S) {
 }
 
 for (j in 1:S) {
-  M.parcorr[[j]] <- -wi2net(round(Theta_mmdl[[j]],22))
+  M.parcorr[[j]] <- wi2net(Theta_mmdl[[j]])
   # g[[j]] <- graph.adjacency(as.matrix(M.parcorr[[j]]), mode="upper", weighted=TRUE, diag=FALSE)
   g[[j]] <- graph_from_adjacency_matrix(as.matrix(M.parcorr[[j]]), mode="undirected", weighted=TRUE, diag=FALSE)
   e[[j]] <- get.edgelist(g[[j]])

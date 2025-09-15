@@ -57,7 +57,7 @@ for (j in 1:S) {
   eig_adj[[j]] <- eigen_centrality(g_adj[[j]])$vector
   betw[[j]] <- edge_betweenness(g[[j]], weights=w_dist(w), directed=FALSE)
   df.e[[j]] <- as.data.frame(cbind(e[[j]],E(g[[j]])$weight))
-  df.e.b[[j]] <- as.data.frame(cbind(e[[j]], 10*(1e-05 + betw[[j]])/max(betw[[j]] + 1e-05)))
+  df.e.b[[j]] <- as.data.frame(cbind(e[[j]], 10*(1e-05 + betw[[j]])/max(betw[[j]] + 1e-05))) # add 1e-05 to avoid zeros
   V(g[[j]])[1:5]$color<-colrs[1] #crypto
   V(g[[j]])[6:7]$color<-colrs[2] #stock
   V(g[[j]])[8:12]$color<-colrs[3] #currency

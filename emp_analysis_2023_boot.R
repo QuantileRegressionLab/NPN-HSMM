@@ -96,7 +96,7 @@ gamma.sd
 
 d.sd = apply(d.array, 1:2, sd.trim, trim = 0.05, na.rm = T)
 
-omega.sd = apply(omega.array, 1:3, sd.trim, trim = 0.1, na.rm = T)
+omega.sd = apply(omega.array, 1:3, sd.trim, trim = 0.05, na.rm = T)
 
 
 (sum(aaa$omega[,,1] != 0) - P)/2

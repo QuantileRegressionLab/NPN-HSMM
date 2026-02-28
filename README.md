@@ -62,7 +62,7 @@ The following scripts allows to reproduce the results of our simulation study:
 -    `tab_sim` reproduces the tables in the Supplementary Materials summarizing the results.
 
 ### Empirical application
--    `emp_analysis_2023` allows to implement the procedure for selecting simultaneously the number of latent states and the optimal value of the Lasso regularization parameter using the ICL. This script yields the final model with 3 states, and can be used to reproduce Figure 1 in the manuscript.
--    `emp_analysis_2023_boot` implements the parametric bootstrap approach described in the Supplementary Materials of the work. This script requires the output provided by `emp_analysis_2023.R` and yields the estimated standard deviation of each parameter estimates.
+-    `emp_analysis_2025` allows to implement the procedure for selecting simultaneously the number of latent states and the optimal value of the Lasso regularization parameter using the ICL. This script yields the final model with 3 states, and can be used to reproduce Figure 1 in the manuscript.
+-    `emp_analysis_2025_boot` implements the parametric bootstrap approach described in the Supplementary Materials of the work. This script requires the output provided by `emp_analysis_2025.R` and yields the estimated standard deviation of each parameter estimates.
 -    Once we obtained the estimates and standard errors, the script `fig&tab_emp_W.R` allows to reproduce Figures 1 (ICL Heatmap), 2 (state-colored time series of returns), 3 (sojourn distributions) and 4 (state-specific graphs) in the manuscript.
--    `emp_analysis_2023_glasso` can be used to fit the HMM Gaussian graphical model of Städler and Mukherjee (2013) on the considered indices.
+-    `emp_analysis_2025_glasso` can be used to fit the HMM Gaussian graphical model of Städler and Mukherjee (2013) on the considered indices.

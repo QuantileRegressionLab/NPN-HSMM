@@ -1,11 +1,11 @@
-# rm(list = ls()) #! ok per github
-# graphics.off()
-# gc()
+rm(list = ls())
+graphics.off()
+gc()
 
 # ! levare per github
-lib = getwd()
-repos = "http://cran.uk.r-project.org"
-.libPaths(c(.libPaths(), lib))
+# lib = getwd()
+# repos = "http://cran.uk.r-project.org"
+# .libPaths(c(.libPaths(), lib))
 
 library(cluster)
 library(readr)
@@ -27,9 +27,9 @@ source("MainFunctions.R")
 source("em_glasso.R")
 #####################################################################
 # Load the data here
-load("df_all_1725.RData")
+# load("df_all_1725.RData")
 # ! For GitHub:
-# load("df_woMSCI_1725.RData")
+load("df_woMSCI_1725.RData")
 ###########################################################################################
 # Fit the model
 S_grid = c(2, 3, 4, 5, 6)
@@ -114,6 +114,6 @@ rownames(glasso.crit) = S_grid
 glasso.crit
 which(glasso.crit == min(glasso.crit, na.rm = T), arr.ind = T)
 
-save.image("glasso_results_2025_M30_R50_rev.RData")
+# save.image("glasso_results_2025_M30_R50_rev.RData")
 # ! For GitHub
-# save.image("glasso_results_2025_woMSCI.RData")
+save.image("glasso_results_2025_woMSCI.RData")

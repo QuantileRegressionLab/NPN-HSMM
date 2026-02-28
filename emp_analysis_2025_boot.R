@@ -11,12 +11,10 @@ library(foreach)
 library(parallel)
 library(doParallel)
 
-# load("analisi_empirica_2025_M30_R20_rev.RData")
-# load("analisi_empirica_2025_M30_R30_rev.RData")
-load("analisi_empirica_2025_M30_R50_rev.RData")
-# load("analisi_empirica_2025_M30_R50_v2.RData")
+
+# load("analisi_empirica_2025_M30_R50_rev.RData")
 # ! For GitHub
-# load("analisi_empirica_2025_M30_R30_rev_woMSCI.RData")
+load("analisi_empirica_2025_M30_R50_woMSCI.RData")
 source("MainFunctions.R")
 
 
@@ -219,9 +217,9 @@ sum(iters <= 500, na.rm = T)
 ####################
 # save.image("analisi_empirica_2025_M30_R20_boot_rev.RData")
 # save.image("analisi_empirica_2025_M30_R30_boot_rev.RData")
-ts_tag <- format(Sys.time(), "%Y%m%d")
-fname <- sprintf("analisi_empirica_2025_M30_R50_boot_%s.RData", ts_tag)
-save.image(fname)
+# ts_tag <- format(Sys.time(), "%Y%m%d")
+# fname <- sprintf("analisi_empirica_2025_M30_R50_boot_%s.RData", ts_tag)
+# save.image(fname)
 # ! For GitHub
-# save.image("analisi_empirica_2025_M30_R50_boot_rev_woMSCI.RData")
+save.image("analisi_empirica_2025_M30_R50_boot_woMSCI.RData")
 ####################

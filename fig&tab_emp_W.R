@@ -25,15 +25,15 @@ library(corpcor)
 source("MainFunctions.R")
 
 # Load the data here
-load("df_all_1725.RData")
+# load("df_all_1725.RData")
 # load("analisi_empirica_2025_M30_R30_boot_rev.RData")
 # load("analisi_empirica_2025_M30_R20_boot_rev.RData")
 # load("analisi_empirica_2025_M30_R50_boot_rev3.RData")
 # load("analisi_empirica_2025_M30_R50_boot_20260224.RData")
-load("analisi_empirica_2025_M30_R50_boot_rev_Luca.RData")
+# load("analisi_empirica_2025_M30_R50_boot_rev_Luca.RData")
 # ! For GitHub:
-# load("df_woMSCI_1725.RData")
-# load("analisi_empirica_2025_M30_R50_boot_woMSCI.RData")
+load("df_woMSCI_1725.RData")
+load("analisi_empirica_2025_M30_R50_boot_woMSCI.RData")
 #########################################################################################################################
 
 ######## State relabeling based on the volatility ordering used in the first version of the paper #############

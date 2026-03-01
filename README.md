@@ -2,9 +2,8 @@
 
 The `R` scripts in this repository are designed to evaluate the performance of the graphical model in *Nonparanormal hidden semi-Markov graphical models for analyzing financial markets interconnectivity* by E. Ferrante, B. Foroni, L. Merlo, and L. Petrella (2025). 
 
-Due to data licensing restrictions, this repository does not allow full replication of all empirical results. 
-It includes the `df_woMSCI_1725.RData` file, containing the publicly available time series (cryptocurrencies, stock indices, commodities, and exchange rates) used in the analysis.
-Data from Datastream (MSCI indices) are proprietary and cannot be redistributed. 
+Due to data licensing restrictions, this repository does not allow full replication of all empirical results. This folder allows to replicate the results for a subset of the indices: cryptocurrencies, stock indices, commodities, and exchange rates. The `df_woMSCI_1725.RData` file contains the publicly available time series used in the analysis. Data from Datastream (MSCI indices) are proprietary and cannot be redistributed. 
+Conversely, the results of the simulation studies contained in the Supplementary Materials of the work can be replicated following the instructions below.
 
 
 ## Prerequisites

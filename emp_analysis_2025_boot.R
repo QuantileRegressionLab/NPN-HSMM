@@ -12,8 +12,6 @@ library(parallel)
 library(doParallel)
 
 
-# load("analisi_empirica_2025_M30_R50_rev.RData")
-# ! For GitHub
 load("analisi_empirica_2025_M30_R50_woMSCI.RData")
 source("MainFunctions.R")
 
@@ -62,9 +60,8 @@ sigma = sapply(
   function(s) cov2cor(as.matrix(nearPD(solve(rho[[s]]))$mat)),
   simplify = F
 )
-# sigma = sapply(1:S, function(s) cov2cor(sigma[,,s]), simplify = F)
+
 d = aaa$d
-# d = dksmoothed(d = d)
 d = as.list(as.data.frame(d))
 
 results_list.boot = foreach(
@@ -126,8 +123,6 @@ results_list.boot = foreach(
     }
 
     fit.boot = oo.se
-    # if(inherits(fit.boot, "try-error")) fit.boot = NULL
-    # return(fit.boot)
   }
 
 
@@ -139,16 +134,8 @@ for (r in 1:R) {
   if (!is.null(results_list.boot[[r]])) {
     if (!any(results_list.boot[[r]]$d == 1)) {
       # non convergence
-      # state.order = order(
-      #   table(results_list.boot[[r]]$predicted_state),
-      #   decreasing = T
-      # )
-      state.order = 1:S
 
-      # state.order = order(
-      #   table(aaa$predicted_state)#,
-      #   # decreasing = T
-      # )
+      state.order = 1:S
       gamma.array[,, r] = results_list.boot[[r]]$gamma[state.order, state.order]
       omega.array[,,, r] = sapply(
         1:S,
@@ -215,11 +202,5 @@ sum(iters, na.rm = TRUE)
 sum(iters <= 500, na.rm = T)
 
 ####################
-# save.image("analisi_empirica_2025_M30_R20_boot_rev.RData")
-# save.image("analisi_empirica_2025_M30_R30_boot_rev.RData")
-# ts_tag <- format(Sys.time(), "%Y%m%d")
-# fname <- sprintf("analisi_empirica_2025_M30_R50_boot_%s.RData", ts_tag)
-# save.image(fname)
-# ! For GitHub
 save.image("analisi_empirica_2025_M30_R50_boot_woMSCI.RData")
 ####################

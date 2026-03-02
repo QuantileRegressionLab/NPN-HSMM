@@ -25,84 +25,9 @@ library(corpcor)
 source("MainFunctions.R")
 
 # Load the data here
-# load("df_all_1725.RData")
-# load("analisi_empirica_2025_M30_R30_boot_rev.RData")
-# load("analisi_empirica_2025_M30_R20_boot_rev.RData")
-# load("analisi_empirica_2025_M30_R50_boot_rev3.RData")
-# load("analisi_empirica_2025_M30_R50_boot_20260224.RData")
-# load("analisi_empirica_2025_M30_R50_boot_rev_Luca.RData")
-# ! For GitHub:
 load("df_woMSCI_1725.RData")
 load("analisi_empirica_2025_M30_R50_boot_woMSCI.RData")
-#########################################################################################################################
-
-######## State relabeling based on the volatility ordering used in the first version of the paper #############
-K <- dim(aaa$sigma)[3]
-
-vol <- sapply(1:K, function(k) sum(diag(aaa$sigma[,, k])))
-low_k <- which.min(vol)
-high_k <- which.max(vol)
-med_k <- setdiff(1:K, c(low_k, high_k))
-
-perm <- c(low_k, high_k, med_k)
-perm
-
-relabel_hsmm <- function(aaa, perm) {
-  out <- aaa
-
-  if (!is.null(out$init)) {
-    out$init <- out$init[perm]
-  }
-  if (!is.null(out$gamma)) {
-    out$gamma <- out$gamma[perm, perm, drop = FALSE]
-  }
-  if (!is.null(out$d)) {
-    out$d <- out$d[, perm, drop = FALSE]
-  }
-  if (!is.null(out$u)) {
-    out$u <- out$u[, perm, drop = FALSE]
-  }
-  if (!is.null(out$emission_prob)) {
-    out$emission_prob <- out$emission_prob[, perm, drop = FALSE]
-  }
-  if (!is.null(out$fden)) {
-    out$fden <- out$fden[, perm, drop = FALSE]
-  }
-  if (!is.null(out$sigma)) {
-    out$sigma <- out$sigma[,, perm, drop = FALSE]
-  }
-  if (!is.null(out$S_tilde)) {
-    out$S_tilde <- out$S_tilde[,, perm, drop = FALSE]
-  }
-  if (!is.null(out$omega)) {
-    out$omega <- out$omega[,, perm, drop = FALSE]
-  }
-  if (!is.null(out$omegaT)) {
-    out$omegaT <- out$omegaT[,, perm, drop = FALSE]
-  }
-  if (!is.null(out$omega.sig)) {
-    out$omega.sig <- out$omega.sig[,, perm, drop = FALSE]
-  }
-
-  out
-}
-
-aaa <- relabel_hsmm(aaa, perm)
-
-d.sd <- d.sd[, perm, drop = FALSE]
-gamma.sd <- gamma.sd[perm, perm, drop = FALSE]
-omega.sd <- omega.sd[,, perm, drop = FALSE]
-
-#numero archi totali
-(sum(aaa$omega[,, 1] != 0) - P) / 2
-(sum(aaa$omega[,, 2] != 0) - P) / 2
-(sum(aaa$omega[,, 3] != 0) - P) / 2
-#numero archi significativi
-(sum(aaa$omega.sig[,, 1] != 0) - P) / 2
-(sum(aaa$omega.sig[,, 2] != 0) - P) / 2
-(sum(aaa$omega.sig[,, 3] != 0) - P) / 2
-
-###### GRAFICI ######
+###### PLOTS ######
 
 labels = c(
   "BNB",
@@ -156,13 +81,13 @@ for (j in 1:S) {
     mode = "upper",
     weighted = TRUE,
     diag = FALSE
-  ) #grafo pesato
+  ) #weighted graph
   g_adj[[j]] <- graph_from_adjacency_matrix(
     as.matrix(Adj_mmdl[,, j]),
     mode = "upper",
     weighted = F,
     diag = FALSE
-  ) #grafo non pesato
+  ) #non-weighted graph
   e[[j]] <- as_edgelist(g[[j]])
   # Count the number of degree for each node:
   deg[[j]] <- degree(g[[j]], mode = "all")
@@ -213,18 +138,18 @@ group_list <- list(
 group_cols <- colrs
 vertex_names <- labels
 
-####### State 1: grafi con nodi proporzionali alla degree centrality ##
+####### State 1: nodes proportional to degree centrality ##
 postscript("graph_K1.revB.eps", width = 980, height = 1010)
 qgraph(
-  df.e[[1]], ######si aggiunge e toglie la legenda ora solo inserendo legend=T
-  layout = "spring", # Senza questo le variabili sono disposte a cerchio
-  fade = F, # Fa sì che i nodi non siano trasparenti
-  directed = F, # Undirected graphs
+  df.e[[1]],
+  layout = "spring",
+  fade = F,
+  directed = F,
   labels = labels,
   color = V(g[[1]])$color,
-  vsize = deg[[1]] / max(deg[[1]]) * 12, # Regola la grandezza dei nodi
-  label.cex = .9, # Grandezza dei label dentro i nodi.
-  label.color = 'black', # string on label colors
+  vsize = deg[[1]] / max(deg[[1]]) * 12,
+  label.cex = .9,
+  label.color = 'black',
   label.prop = 1.2,
   repulsion = .9,
   legend = F,
@@ -235,40 +160,31 @@ qgraph(
 )
 
 
-### State 1: grafi con nodi proporzionali alla eigenvector centrality e archi prop alla edge-betweeness ##
-# postscript("graph_K1.revB_eig.eps", width = 980, height = 1010)
-# postscript("graph_K1.rev25.v2.eps", width = 980, height = 1010)
-cairo_pdf(
-  file = "graph_K1.rev25.v2.pdf",
-  width = 980,
-  height = 1010
-)
+### State 1: nodes proportional to eigenvector centrality and edges proportional to edge-betweeness ##
+postscript("graph_K1.rev25.v2.eps", width = 980, height = 1010)
 qgraph(
-  df.e.b[[1]], ######si aggiunge e toglie la legenda ora solo inserendo legend=T
-  layout = "spring", # Senza questo le variabili sono disposte a cerchio
-  fade = F, # Fa sì che i nodi non siano trasparenti
-  directed = F, # Directed graphs
-  edge.color = "grey30", # Colore degli archi
-  labels = labels, ######versione precedente !!!
-  color = V(g[[1]])$color, ######versione precedente !!!
-  vsize = 13 * (eig[[1]] / max(eig[[1]]))^(1 / 3), #farla non lineare, magari quadratica
-  # label.cex = 1.3, # Grandezza dei label dentro i nodi. ###prima era 0.9
-  label.cex = 1.1, #dati 25
-  label.color = 'black', # string on label colors
-  label.prop = 1.2, # proportion of the width of the node that the label scales
-  repulsion = .9, #vecchio è 0.9
-  # repulsion = 0.8, #dati25,
+  df.e.b[[1]],
+  layout = "spring",
+  fade = F,
+  directed = F,
+  edge.color = "grey30",
+  labels = labels,
+  color = V(g[[1]])$color,
+  vsize = 13 * (eig[[1]] / max(eig[[1]]))^(1 / 3),
+  label.cex = 1.1,
+  label.color = 'black',
+  label.prop = 1.2,
+  repulsion = .9,
   edge.width = 3 * (betw[[1]] / max(betw[[1]]))^(1 / 3),
   legend = F,
   legend.mode = "style2",
   legend.cex = .75,
   groups = group_list,
-  # color=group_cols, ##versione con legenda, da eliminare nella versione precedente
   nodeNames = vertex_names
 )
 dev.off()
 
-####### State 2: grafi con nodi proporzionali alla degree centrality ##
+####### State 2: nodes proportional to degree centrality ##
 postscript("graph_K2.revB.eps", width = 980, height = 1010)
 qgraph(
   df.e[[2]],
@@ -290,24 +206,21 @@ qgraph(
 )
 dev.off()
 
-### State 2: grafi con nodi proporzionali alla eigenvector centrality e archi prop alla edge-betweeness ##
-# postscript("graph_K2.revB_eig.eps", width = 980, height = 1010)
+### State 2: nodes proportional to eigenvector centrality and edges proportional to edge-betweeness ##
 postscript("graph_K2.rev25.v2.eps", width = 980, height = 1010)
 qgraph(
   df.e.b[[2]],
-  layout = "spring", # Senza questo le variabili sono disposte a cerchio
-  fade = F, # Fa sì che i nodi non siano trasparenti
-  directed = F, # Directed graphs
-  edge.color = "grey30", # Colore degli archi
+  layout = "spring",
+  fade = F,
+  directed = F,
+  edge.color = "grey30",
   labels = labels,
   color = V(g[[2]])$color,
   vsize = 13 * (eig[[2]] / max(eig[[2]]))^(1 / 3),
-  # label.cex = 1.3, # Grandezza dei label dentro i nodi.
-  label.cex = 1.1, #dati 25
-  label.color = 'black', # string on label colors
-  label.prop = 1.2, # proportion of the width of the node that the label scales
-  repulsion = .9, #vecchio è 0.9
-  # repulsion = .8, #vecchio è 0.9, dati25
+  label.cex = 1.1,
+  label.color = 'black',
+  label.prop = 1.2,
+  repulsion = .9,
   edge.width = 3 * (betw[[2]] / max(betw[[2]]))^(1 / 3),
   legend = F,
   legend.mode = "style2",
@@ -316,9 +229,7 @@ qgraph(
 )
 dev.off()
 
-#1010x980 se salvo da export
-
-####### State 3: grafi con nodi proporzionali alla degree centrality ##
+####### State 3: nodes proportional to degree centrality ##
 postscript("graph_K3.revB.eps", width = 980, height = 1010)
 qgraph(
   df.e[[3]],
@@ -341,25 +252,21 @@ qgraph(
 dev.off()
 
 
-### State 3: grafi con nodi proporzionali alla eigenvector centrality e archi prop alla edge-betweeness ##
-# postscript("graph_K3.revB_eig.eps", width = 980, height = 1010)
+### State 3: nodes proportional to eigenvector centrality and edges proportional to edge-betweeness ##
 postscript("graph_K3.rev25.v2.eps", width = 980, height = 1010)
 qgraph(
-  df.e.b[[3]], ######si aggiunge e toglie la legenda ora solo inserendo legend=T
-  layout = "spring", # Senza questo le variabili sono disposte a cerchio
-  fade = F, # Fa sì che i nodi non siano trasparenti
-  directed = F, # Directed graphs
-  edge.color = "gray30", # Colore degli archi
+  df.e.b[[3]],
+  layout = "spring",
+  fade = F,
+  directed = F,
+  edge.color = "gray30",
   labels = labels,
   color = V(g[[3]])$color,
   vsize = 13 * (eig[[3]] / max(eig[[3]]))^(1 / 3),
-  # label.cex = 1.3, # Grandezza dei label dentro i nodi. ###prima era 0.9
-  label.cex = 1.1, #dati 25
-  label.color = 'black', # string on label colors
-  label.prop = 1.2, # proportion of the width of the node that the label scales
-  repulsion = 0.9, #vecchio è 0.9
-  # repulsion = 0.8, #dati25, vecchio è 0.9
-  # edge.width = 3*(betw[[3]]/max(betw[[3]]))^(1/3),
+  label.cex = 1.1,
+  label.color = 'black',
+  label.prop = 1.2,
+  repulsion = 0.9,
   edge.width = 3 * (betw[[3]] / max(betw[[3]]))^(1 / 3),
   legend = F,
   legend.mode = "style2",
@@ -370,7 +277,7 @@ dev.off()
 
 ############################################################################################
 
-#### Correlazione media per ogni stato:
+#### Average correlation for every state:
 mean(abs(as.vector(Theta_mmdl[[1]][upper.tri(Theta_mmdl[[1]], diag = F)])))
 mean(abs(as.vector(Theta_mmdl[[2]][upper.tri(Theta_mmdl[[2]], diag = F)])))
 mean(abs(as.vector(Theta_mmdl[[3]][upper.tri(Theta_mmdl[[3]], diag = F)])))
@@ -428,7 +335,6 @@ dd <- ggplot(
   xlab("Sojourn Time") +
   ylab("Probability") +
   ylim(0, .35) +
-  # scale_fill_manual(values = c("State 1" = "red", "State 2" = "blue", "State 3" = "green")) +
   theme(
     legend.position = "none",
     axis.title.x = element_text(size = 21),
@@ -441,8 +347,7 @@ dd <- ggplot(
   scale_fill_manual(values = personal_colors)
 print(dd)
 dev.off()
-#789x608 versione Luca dati 25
-# 1121x305
+#789x608
 
 ###### Predicted posterior probabilities ######
 posterior_df <- data.frame(
@@ -488,12 +393,7 @@ p
 ####### Predicted sequence of hidden states over time #####
 d_list <- list(aaa$d[, 1], aaa$d[, 2], aaa$d[, 3])
 Gamma_star <- hsmm2hmm(aaa$gamma, d_list)
-# emissions_star <- do.call(
-#   cbind,
-#   lapply(1:ncol(aaa$fden), function(i) {
-#     matrix(rep(aaa$fden[, i], M), nrow = nrow(aaa$fden), ncol = M)
-#   })
-# )
+
 emissions_star <- do.call(
   cbind,
   lapply(1:ncol(aaa$emission_prob), function(i) {

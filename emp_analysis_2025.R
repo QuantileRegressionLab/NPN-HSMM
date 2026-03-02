@@ -1,11 +1,7 @@
-rm(list = ls()) #! ok per github
+rm(list = ls())
 graphics.off()
 gc()
 
-# ! levare per github
-# lib = getwd()
-# repos = "http://cran.uk.r-project.org"
-# .libPaths(c(.libPaths(), lib))
 
 library(cluster)
 library(readr)
@@ -27,8 +23,6 @@ source("MainFunctions.R")
 
 #####################################################################
 # Load the data here
-# load("df_all_1725.RData")
-# ! For GitHub:
 load("df_woMSCI_1725.RData")
 
 #####################################################################
@@ -157,6 +151,4 @@ apply(llk.mat, 1, mean)
 mean(llk.mat)
 # (max(tmp.llk) - tmp.llk)/max(tmp.llk) < 10^-3
 
-# save.image(paste0("analisi_empirica_2025_M", M, "_R", R, ".RData"))
-# ! For GitHub
 save.image(paste0("analisi_empirica_2025_M", M, "_R", R, "_woMSCI.RData"))

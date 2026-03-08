@@ -143,7 +143,7 @@ for (sim in 1:nsim) {
   # - The off-diagonal elements of the transition matrix (gamma) are computed as
   #   proportions of transition from the generated partition.
   # - Emission covariance matrices (sigma) are initialized as diagonal matrices.
-  # - Sojourn-time distributions (d) are are estimated from the initial
+  # - Sojourn-time distributions (d) are estimated from the initial
   #   partition assuming a Geometric distribution as in HMMs.
 
   # - This initialization is the same in every setting
